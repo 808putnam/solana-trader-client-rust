@@ -58,17 +58,6 @@ If you want to see output from a given test, add the `nocapture` flag:
 cargo test test_raydium_quotes_grpc -- --ignored --nocapture
 ```
 
-
-## Adding new test cases
-Using the `test_case` crate tests are parametrized:
-
-```rust
-// old test
-#[test_case("BTC", "USDC", 0.1, 0.1 ; "BTC to USDC with 0.1% slippage")]
-// new test case
-#[test_case("BTC", "USDC", 0.1, 10 ; "BTC to USDC with 10% slippage")]
-```
-
 ## Vscode 
 Tests can also be ran/debugged on click with vscode. 
 Just add a `settings.json` inside the `.vscode` folder, paste this snippet, and fill in the auth key:

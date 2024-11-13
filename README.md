@@ -2,7 +2,7 @@
 
 With the `solana-trader-proto` in the right path:
 
-``solana-trader-proto = { path = "../../services/solana-trader-proto/rust" }``
+``solana-trader-proto = { path = "../solana-trader-proto" }``
 
 Change this above line to the path where your proto repo is, for now. **this will be updated to the published crate eventually**
 

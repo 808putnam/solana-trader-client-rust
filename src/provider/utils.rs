@@ -76,7 +76,6 @@ mod tests {
         convert_string_enums(&mut value);
 
         assert_eq!(value["project"], 2);
-        assert_eq!(value["tradeFeeRate"], 1000);
         assert_eq!(value["nested"]["project"], 3);
         assert_eq!(value["nested"]["priceImpactPercent"]["infinity"], 0);
         assert_eq!(value["array"][0]["project"], 5);

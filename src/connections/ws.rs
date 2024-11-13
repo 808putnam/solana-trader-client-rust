@@ -1,6 +1,7 @@
 use anyhow::Result;
 use futures_util::{SinkExt, StreamExt};
 use rustls::crypto::ring::default_provider;
+use rustls::crypto::CryptoProvider;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::{json, Value};
@@ -125,10 +126,12 @@ impl WS {
         headers.insert("Upgrade", "websocket".parse()?);
         headers.insert("Sec-WebSocket-Version", "13".parse()?);
 
-        default_provider()
-            .install_default()
-            .map_err(|e| anyhow::anyhow!("Failed to install crypto provider: {:?}", e))?;
-
+        if CryptoProvider::get_default().is_none() {
+            default_provider()
+                .install_default()
+                .map_err(|e| anyhow::anyhow!("Failed to install crypto provider: {:?}", e))?;
+        }
+        
         let root_store = RootCertStore {
             roots: webpki_roots::TLS_SERVER_ROOTS.to_vec(),
         };

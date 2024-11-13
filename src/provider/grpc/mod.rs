@@ -4,6 +4,7 @@ pub mod swap;
 
 use anyhow::Result;
 use rustls::crypto::ring::default_provider;
+use rustls::crypto::CryptoProvider;
 use solana_sdk::pubkey::Pubkey;
 use solana_trader_proto::api;
 use std::collections::HashMap;
@@ -69,10 +70,12 @@ impl GrpcClient {
         let base = BaseConfig::try_from_env()?;
         let (base_url, secure) = get_base_url_from_env();
         let endpoint = endpoint.unwrap_or_else(|| grpc_endpoint(&base_url, secure));
-        default_provider()
+        if CryptoProvider::get_default().is_none() {
+            default_provider()
             .install_default()
             .map_err(|e| anyhow::anyhow!("Failed to install crypto provider: {:?}", e))?;
-
+        }
+        
         let channel = Channel::from_shared(endpoint.clone())
             .map_err(|e| anyhow::anyhow!("Invalid URI: {}", e))?
             .tls_config(ClientTlsConfig::new().with_webpki_roots())

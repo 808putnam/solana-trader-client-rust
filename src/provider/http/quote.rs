@@ -114,13 +114,13 @@ impl HTTPClient {
         limit: i32,
         projects: &[api::Project],
     ) -> Result<api::GetQuotesResponse> {
-        let project_params = projects.iter().map(|p| format!("&project={}", *p as i32));
+        let project_params: Vec<String> = projects.iter().map(|p| format!("&project={}", *p as i32)).collect();        
 
         let url = format!(
-            "{}/api/v1/market/quote?inToken={}&outToken={}&inAmount={}&slippage={}&limit={}{:?}",
-            self.base_url, in_token, out_token, in_amount, slippage, limit, project_params
+            "{}/api/v1/market/quote?inToken={}&outToken={}&inAmount={}&slippage={}&limit={}{}",
+            self.base_url, in_token, out_token, in_amount, slippage, limit, project_params.join("")
         );
-
+        
         let response = self
             .client
             .get(&url)

@@ -2,11 +2,6 @@ use anyhow::Result;
 use solana_trader_proto::api;
 use solana_trader_proto::api::{GetAccountBalanceRequest, GetRateLimitRequest, GetRecentBlockHashRequest, GetRecentBlockHashRequestV2, GetTransactionRequest};
 use crate::provider::ws::WebSocketClient;
-use solana_trader_proto::api;
-use solana_trader_proto::api::{
-    GetAccountBalanceRequest, GetRateLimitRequest, GetRecentBlockHashRequest,
-    GetRecentBlockHashRequestV2, GetTransactionRequest,
-};
 
 impl WebSocketClient {
     pub async fn get_transaction(

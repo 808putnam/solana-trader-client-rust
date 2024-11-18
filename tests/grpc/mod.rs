@@ -1,4 +1,3 @@
-mod general;
 mod memo;
 pub mod quote;
 pub mod stream;

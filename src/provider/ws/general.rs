@@ -1,3 +1,4 @@
+use anyhow::Result;
 use solana_trader_proto::api;
 use solana_trader_proto::api::{GetAccountBalanceRequest, GetRateLimitRequest, GetRecentBlockHashRequest, GetRecentBlockHashRequestV2, GetTransactionRequest};
 use crate::provider::ws::WebSocketClient;
@@ -52,4 +53,47 @@ impl WebSocketClient {
         self.conn.request("GetAccountBalanceV2", params).await
     }
 
+    pub async fn get_priority_fee(
+        &self,
+        project: api::Project,
+        percentile: Option<f64>,
+    ) -> Result<api::GetPriorityFeeResponse> {
+        let request = api::GetPriorityFeeRequest {
+            project: project as i32,
+            percentile,
+        };
+
+        let params = serde_json::to_value(request)
+            .map_err(|e| anyhow::anyhow!("Failed to serialize request: {}", e))?;
+
+        self.conn.request("GetPriorityFee", params).await
+    }
+
+    pub async fn get_token_accounts(
+        &self,
+        owner_address: String,
+    ) -> Result<api::GetTokenAccountsResponse> {
+        let request = api::GetTokenAccountsRequest {
+            owner_address
+        };
+
+        let params = serde_json::to_value(request)
+            .map_err(|e| anyhow::anyhow!("Failed to serialize request: {}", e))?;
+
+        self.conn.request("GetTokenAccounts", params).await
+    }
+
+    pub async fn get_account_balance(
+        &self,
+        owner_address: String,
+    ) -> Result<api::GetAccountBalanceResponse> {
+        let request = api::GetAccountBalanceRequest {
+            owner_address
+        };
+
+        let params = serde_json::to_value(request)
+            .map_err(|e| anyhow::anyhow!("Failed to serialize request: {}", e))?;
+
+        self.conn.request("GetAccountBalance", params).await
+    }
 }

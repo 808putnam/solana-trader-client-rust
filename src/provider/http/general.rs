@@ -1,4 +1,4 @@
-use anyhow::anyhow;
+use anyhow::{anyhow, Result};
 use solana_trader_proto::api;
 use solana_trader_proto::api::GetAccountBalanceRequest;
 use crate::provider::http::HTTPClient;
@@ -114,6 +114,68 @@ impl HTTPClient {
         let url = format!(
             "{}/api/v2/balance?ownerAddress={}",
             self.base_url, request.owner_address
+        );
+
+        let response = self
+            .client
+            .get(&url)
+            .send()
+            .await
+            .map_err(|e| anyhow!("HTTP GET request failed: {}", e))?;
+
+        self.handle_response(response).await
+    }
+
+    pub async fn get_priority_fee(
+        &self,
+        project: api::Project,
+        percentile: Option<f64>,
+   ) -> Result<api::GetPriorityFeeResponse> {
+        let mut url = format!(
+            "{}/api/v2/system/priority-fee?project={}",
+            self.base_url, project as i32);
+        if let Some(p) = percentile {
+            url = format!(
+                "{}/api/v2/system/priority-fee?project={}&percentile={}",
+                self.base_url, project as i32, p);
+            
+        }
+
+        let response = self
+            .client
+            .get(&url)
+            .send()
+            .await
+            .map_err(|e| anyhow!("HTTP GET request failed: {}", e))?;
+
+        self.handle_response(response).await
+    }
+
+    pub async fn get_token_accounts(
+        &self,
+        owner_address: String,
+   ) -> Result<api::GetTokenAccountsResponse> {
+        let url = format!(
+            "{}/api/v1/account/token-accounts?ownerAddress={}",
+            self.base_url, owner_address);
+
+        let response = self
+            .client
+            .get(&url)
+            .send()
+            .await
+            .map_err(|e| anyhow!("HTTP GET request failed: {}", e))?;
+
+        self.handle_response(response).await
+    }
+
+    pub async fn get_account_balance(
+        &self,
+        owner_address: String,
+    ) -> Result<api::GetAccountBalanceResponse> {
+        let url = format!(
+            "{}/api/v2/balance?ownerAddress={}",
+            self.base_url, owner_address
         );
 
         let response = self

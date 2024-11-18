@@ -71,4 +71,57 @@ impl GrpcClient {
 
         Ok(response.into_inner())
     }
+
+    pub async fn get_priority_fee(
+        &mut self,
+        project: api::Project,
+        percentile: Option<f64>,
+    ) -> Result<api::GetPriorityFeeResponse> {
+        let request = Request::new(api::GetPriorityFeeRequest {
+            project: project as i32,
+            percentile,
+        });
+
+        let response = self
+            .client
+            .get_priority_fee(request)
+            .await
+            .map_err(|e| anyhow::anyhow!("GetPriorityFee error: {}", e))?;
+
+        Ok(response.into_inner())
+    }
+
+    pub async fn get_token_accounts(
+        &mut self,
+        owner_address: String,
+    ) -> Result<api::GetTokenAccountsResponse> {
+        let request = Request::new(api::GetTokenAccountsRequest {
+            owner_address: owner_address
+        });
+
+        let response = self
+            .client
+            .get_token_accounts(request)
+            .await
+            .map_err(|e| anyhow::anyhow!("GetTokenAccounts error: {}", e))?;
+
+        Ok(response.into_inner())
+    }
+
+    pub async fn get_account_balance(
+        &mut self,
+        owner_address: String,
+    ) -> Result<api::GetAccountBalanceResponse> {
+        let request = Request::new(api::GetAccountBalanceRequest {
+            owner_address
+        });
+
+        let response = self
+            .client
+            .get_account_balance(request)
+            .await
+            .map_err(|e| anyhow::anyhow!("GetAccountBalance error: {}", e))?;
+
+        Ok(response.into_inner())
+    }    
 }

@@ -2,4 +2,4 @@ mod memo;
 pub mod quote;
 pub mod stream;
 pub mod swap;
-mod general;
+pub mod general;

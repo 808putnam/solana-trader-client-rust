@@ -1,3 +1,3 @@
 pub mod quote;
 pub mod swap;
-mod general;
+pub mod general;

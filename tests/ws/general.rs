@@ -3,21 +3,17 @@ use std::time::Duration;
 use tokio::time::timeout;
 
 use solana_trader_client_rust::{
+    common::{constants::SAMPLE_OWNER_ADDR, constants::SAMPLE_TX_SIGNATURE},
     provider::ws::WebSocketClient,
-    common::{constants::SAMPLE_TX_SIGNATURE, constants::SAMPLE_OWNER_ADDR}
 };
 use solana_trader_proto::api;
 use test_case::test_case;
 
-#[test_case(
-    SAMPLE_TX_SIGNATURE
-)]
+#[test_case(SAMPLE_TX_SIGNATURE)]
 #[tokio::test]
 #[ignore]
 
-async fn test_get_transaction_ws(
-    signature: &str,
-) -> Result<()> {
+async fn test_get_transaction_ws(signature: &str) -> Result<()> {
     let client = WebSocketClient::new(None).await?;
 
     let request = api::GetTransactionRequest {
@@ -42,8 +38,7 @@ async fn test_get_transaction_ws(
 async fn test_get_recent_block_hash() -> Result<()> {
     let client = WebSocketClient::new(None).await?;
 
-    let request = api::GetRecentBlockHashRequest {
-    };
+    let request = api::GetRecentBlockHashRequest {};
 
     let response = client.get_recent_block_hash(request).await?;
     println!(
@@ -81,8 +76,7 @@ async fn test_get_recent_block_hash_v2_ws() -> Result<()> {
 async fn test_get_rate_limit_ws() -> Result<()> {
     let client = WebSocketClient::new(None).await?;
 
-    let request = api::GetRateLimitRequest {
-    };
+    let request = api::GetRateLimitRequest {};
 
     let response = client.get_rate_limit(request).await?;
     println!(
@@ -94,16 +88,15 @@ async fn test_get_rate_limit_ws() -> Result<()> {
     Ok(())
 }
 
-#[test_case(
-    SAMPLE_OWNER_ADDR
-)]
+#[test_case(SAMPLE_OWNER_ADDR)]
 #[tokio::test]
 #[ignore]
-async fn test_get_account_balance_v2_ws(    owner_addr: &str,
-) -> Result<()> {
+async fn test_get_account_balance_v2_ws(owner_addr: &str) -> Result<()> {
     let client = WebSocketClient::new(None).await?;
 
-    let request = api::GetAccountBalanceRequest {owner_address: owner_addr.to_string()};
+    let request = api::GetAccountBalanceRequest {
+        owner_address: owner_addr.to_string(),
+    };
 
     let response = client.get_account_balance_v2(request).await?;
     println!(

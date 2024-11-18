@@ -1,7 +1,15 @@
 [package]
 name = "solana-trader-client-rust"
-version = "0.1.1"
+version = "0.1.0"
 edition = "2021"
+authors = ["support@bloxroute.com"]
+description = "Solana Trader API client implementation"
+license = "MIT"
+repository = "https://github.com/bloXroute-Labs/solana-trader-client-rust"
+homepage = "https://bloxroute.com/"
+readme = "README.md"
+keywords = ["solana", "blockchain", "trading", "client", "sdk", "api"]
+categories = ["development-tools::ffi", "cryptography::cryptocurrencies"]
 
 [[test]]
 name = "grpc"

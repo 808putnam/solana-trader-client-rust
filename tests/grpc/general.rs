@@ -1,18 +1,14 @@
 use anyhow::Result;
 use solana_trader_client_rust::{
+    common::{constants::SAMPLE_OWNER_ADDR, constants::SAMPLE_TX_SIGNATURE},
     provider::grpc::GrpcClient,
-    common::{constants::SAMPLE_TX_SIGNATURE, constants::SAMPLE_OWNER_ADDR}
 };
 use solana_trader_proto::api;
 use test_case::test_case;
-#[test_case(
-     SAMPLE_TX_SIGNATURE
-)]
+#[test_case(SAMPLE_TX_SIGNATURE)]
 #[tokio::test]
 #[ignore]
-async fn test_get_transaction_grpc(
-    signature: &str,
-) -> Result<()> {
+async fn test_get_transaction_grpc(signature: &str) -> Result<()> {
     let mut client = GrpcClient::new(None).await?;
 
     let request = api::GetTransactionRequest {
@@ -24,18 +20,14 @@ async fn test_get_transaction_grpc(
         "Get Transaction Response: {}",
         serde_json::to_string_pretty(&response)?
     );
-    assert!(
-        response.slot > 0,
-        "Expected a lot in the tx response"
-    );
+    assert!(response.slot > 0, "Expected a lot in the tx response");
 
     Ok(())
 }
 
 #[tokio::test]
 #[ignore]
-async fn test_get_recent_block_hash_grpc(
-) -> Result<()> {
+async fn test_get_recent_block_hash_grpc() -> Result<()> {
     let mut client = GrpcClient::new(None).await?;
 
     let request = api::GetRecentBlockHashRequest {};
@@ -53,8 +45,7 @@ async fn test_get_recent_block_hash_grpc(
 
 #[tokio::test]
 #[ignore]
-async fn test_get_recent_block_hash_v2_grpc(
-) -> Result<()> {
+async fn test_get_recent_block_hash_v2_grpc() -> Result<()> {
     let mut client = GrpcClient::new(None).await?;
 
     // Test different offset values
@@ -75,8 +66,7 @@ async fn test_get_recent_block_hash_v2_grpc(
 
 #[tokio::test]
 #[ignore]
-async fn test_get_rate_limit_grpc(
-) -> Result<()> {
+async fn test_get_rate_limit_grpc() -> Result<()> {
     let mut client = GrpcClient::new(None).await?;
 
     let request = api::GetRateLimitRequest {};
@@ -91,17 +81,15 @@ async fn test_get_rate_limit_grpc(
 
     Ok(())
 }
-#[test_case(
-    SAMPLE_OWNER_ADDR
-)]
+#[test_case(SAMPLE_OWNER_ADDR)]
 #[tokio::test]
 #[ignore]
-async fn test_get_account_balance_v2_grpc(
-    owner_addr: &str,
-) -> Result<()> {
+async fn test_get_account_balance_v2_grpc(owner_addr: &str) -> Result<()> {
     let mut client = GrpcClient::new(None).await?;
 
-    let request = api::GetAccountBalanceRequest {owner_address: owner_addr.to_string()};
+    let request = api::GetAccountBalanceRequest {
+        owner_address: owner_addr.to_string(),
+    };
 
     let response = client.get_account_balance_v2(&request).await?;
     println!(

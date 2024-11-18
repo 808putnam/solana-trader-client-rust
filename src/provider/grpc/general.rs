@@ -45,7 +45,6 @@ impl GrpcClient {
         Ok(response.into_inner())
     }
 
-
     pub async fn get_rate_limit(
         &mut self,
         request: &api::GetRateLimitRequest,

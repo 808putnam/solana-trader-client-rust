@@ -1,7 +1,7 @@
+pub mod general;
 pub mod quote;
 pub mod stream;
 pub mod swap;
-pub mod general;
 
 use anyhow::Result;
 use rustls::crypto::ring::default_provider;
@@ -19,8 +19,7 @@ use crate::common::signing::{get_keypair, sign_transaction, SubmitParams};
 use crate::common::{get_base_url_from_env, grpc_endpoint, BaseConfig};
 use solana_sdk::signature::Keypair;
 use solana_trader_proto::api::{
-    GetRecentBlockHashRequestV2, PostSubmitRequest,
-    TransactionMessage,
+    GetRecentBlockHashRequestV2, PostSubmitRequest, TransactionMessage,
 };
 
 use super::utils::IntoTransactionMessage;

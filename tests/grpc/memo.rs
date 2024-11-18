@@ -1,6 +1,7 @@
 use base64::engine::general_purpose;
 use base64::Engine;
 use dotenv::dotenv;
+use solana_hash::Hash;
 use solana_sdk::instruction::{AccountMeta, CompiledInstruction, Instruction};
 use solana_sdk::message::VersionedMessage;
 use solana_sdk::pubkey::Pubkey;
@@ -11,7 +12,6 @@ use solana_trader_client_rust::common::signing::SubmitParams;
 use solana_trader_client_rust::provider::grpc::GrpcClient;
 use solana_trader_proto::api::{GetRecentBlockHashRequestV2, TransactionMessage};
 use std::str::FromStr;
-use solana_hash::Hash;
 
 #[tokio::test]
 #[ignore]
@@ -104,18 +104,18 @@ async fn test_add_memo_to_serialized_tx() -> anyhow::Result<()> {
     account_keys.push(trader_apimemo_program);
 
     if let VersionedMessage::Legacy(message) = msg {
-            let bx_memo_marker_msg = String::from("Powered by bloXroute Trader Api")
-                .as_bytes()
-                .to_vec();
+        let bx_memo_marker_msg = String::from("Powered by bloXroute Trader Api")
+            .as_bytes()
+            .to_vec();
 
-            message.account_keys = account_keys.clone();
-            message
-                .instructions
-                .push(CompiledInstruction::new_from_raw_parts(
-                    (message.clone().account_keys.len() - 1) as u8,
-                    bx_memo_marker_msg,
-                    vec![],
-                ));
+        message.account_keys = account_keys.clone();
+        message
+            .instructions
+            .push(CompiledInstruction::new_from_raw_parts(
+                (message.clone().account_keys.len() - 1) as u8,
+                bx_memo_marker_msg,
+                vec![],
+            ));
     }
 
     let content = bincode::serialize(&deserialized_tx)?;
@@ -124,7 +124,10 @@ async fn test_add_memo_to_serialized_tx() -> anyhow::Result<()> {
         content: general_purpose::STANDARD.encode(content),
         is_cleanup: false,
     }];
-    let submit_opts = SubmitParams { use_staked_rpcs: false, ..Default::default() };
+    let submit_opts = SubmitParams {
+        use_staked_rpcs: false,
+        ..Default::default()
+    };
     let s = client.sign_and_submit(vec, submit_opts, false).await;
     println!("signature : {:#?}", s?);
     Ok(())

@@ -1,20 +1,16 @@
 use anyhow::Result;
 
 use solana_trader_client_rust::{
+    common::{constants::SAMPLE_OWNER_ADDR, constants::SAMPLE_TX_SIGNATURE},
     provider::http::HTTPClient,
-    common::{constants::SAMPLE_TX_SIGNATURE, constants::SAMPLE_OWNER_ADDR}
 };
 use solana_trader_proto::api;
 use test_case::test_case;
 
-#[test_case(
-    SAMPLE_TX_SIGNATURE
-)]
+#[test_case(SAMPLE_TX_SIGNATURE)]
 #[tokio::test]
 #[ignore]
-async fn test_get_transaction_http(
-    signature: &str,
-) -> Result<()> {
+async fn test_get_transaction_http(signature: &str) -> Result<()> {
     let client = HTTPClient::new(None)?;
 
     let request = api::GetTransactionRequest {
@@ -54,8 +50,7 @@ async fn test_get_recent_block_hash_http() -> Result<()> {
 
 #[tokio::test]
 #[ignore]
-async fn test_get_recent_block_hash_v2_http(
-) -> Result<()> {
+async fn test_get_recent_block_hash_v2_http() -> Result<()> {
     let client = HTTPClient::new(None)?;
 
     // Test different offset values
@@ -69,7 +64,6 @@ async fn test_get_recent_block_hash_v2_http(
             serde_json::to_string_pretty(&response)?
         );
 
-
         assert_ne!(response.offset, offset, "Expected a recent blockhash");
     }
     Ok(())
@@ -77,8 +71,7 @@ async fn test_get_recent_block_hash_v2_http(
 
 #[tokio::test]
 #[ignore]
-async fn test_get_rate_limit_http(
-) -> Result<()> {
+async fn test_get_rate_limit_http() -> Result<()> {
     let client = HTTPClient::new(None)?;
 
     let response = client.get_rate_limit().await?;
@@ -92,17 +85,15 @@ async fn test_get_rate_limit_http(
     Ok(())
 }
 
-#[test_case(
-    SAMPLE_OWNER_ADDR
-)]
+#[test_case(SAMPLE_OWNER_ADDR)]
 #[tokio::test]
 #[ignore]
-async fn test_get_account_balance_v2_http(
-    owner_addr: &str,
-) -> Result<()> {
+async fn test_get_account_balance_v2_http(owner_addr: &str) -> Result<()> {
     let client = HTTPClient::new(None)?;
 
-    let request = api::GetAccountBalanceRequest {owner_address: owner_addr.to_string()};
+    let request = api::GetAccountBalanceRequest {
+        owner_address: owner_addr.to_string(),
+    };
 
     let response = client.get_account_balance_v2(request).await?;
     println!(

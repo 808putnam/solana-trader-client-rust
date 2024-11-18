@@ -1,7 +1,7 @@
 use anyhow::{anyhow, Result};
+use crate::provider::http::HTTPClient;
 use solana_trader_proto::api;
 use solana_trader_proto::api::GetAccountBalanceRequest;
-use crate::provider::http::HTTPClient;
 
 impl HTTPClient {
     pub async fn get_transaction(
@@ -43,13 +43,8 @@ impl HTTPClient {
 
         self.handle_response(response).await
     }
-    pub async fn get_recent_block_hash(
-        &self,
-    ) -> anyhow::Result<api::GetRecentBlockHashResponse> {
-        let url = format!(
-            "{}/api/v1/system/blockhash",
-            self.base_url
-        );
+    pub async fn get_recent_block_hash(&self) -> anyhow::Result<api::GetRecentBlockHashResponse> {
+        let url = format!("{}/api/v1/system/blockhash", self.base_url);
 
         println!("{}", url);
 
@@ -84,13 +79,8 @@ impl HTTPClient {
         self.handle_response(response).await
     }
 
-    pub async fn get_rate_limit(
-        &self,
-    ) -> anyhow::Result<api::GetRateLimitResponse> {
-        let url = format!(
-            "{}/api/v2/rate-limit",
-            self.base_url
-        );
+    pub async fn get_rate_limit(&self) -> anyhow::Result<api::GetRateLimitResponse> {
+        let url = format!("{}/api/v2/rate-limit", self.base_url);
 
         println!("{}", url);
 
@@ -108,7 +98,6 @@ impl HTTPClient {
         &self,
         request: GetAccountBalanceRequest,
     ) -> anyhow::Result<api::GetAccountBalanceResponse> {
-
         println!("here1");
 
         let url = format!(

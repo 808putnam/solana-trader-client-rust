@@ -19,7 +19,7 @@ pub struct SubmitParams {
     pub use_staked_rpcs: bool,
     pub fast_best_effort: bool,
     pub submit_strategy: api::SubmitStrategy,
-    pub allow_bank_run: Option<bool>,
+    pub allow_back_run: Option<bool>,
     pub revenue_address: Option<String>,
 }
 
@@ -31,7 +31,7 @@ impl Default for SubmitParams {
             use_staked_rpcs: true,
             fast_best_effort: false,
             submit_strategy: api::SubmitStrategy::PSubmitAll,
-            allow_bank_run: None,
+            allow_back_run: None,
             revenue_address: None,
         }
     }

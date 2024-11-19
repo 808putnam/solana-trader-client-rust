@@ -8,7 +8,7 @@ license = "MIT"
 repository = "https://github.com/bloXroute-Labs/solana-trader-client-rust"
 homepage = "https://bloxroute.com/"
 readme = "README.md"
-keywords = ["solana", "blockchain", "trading", "client", "sdk", "api"]
+keywords = ["solana", "blockchain", "trading", "client", "sdk"]
 categories = ["api-bindings"]
 
 [[test]]

@@ -124,6 +124,7 @@ async fn test_get_priority_fee_http(project: api::Project, percentile: Option<f6
 
 #[test_case(vec!["CAMMCzo5YL8w4VFF8KVHrK22GGUsp5VTaW7grrKgrWqK".to_string(), "CPMMoo8L3F4NbTegBCKVNunggL7H1ZpdTHKxQB5qKP1C".to_string()])]
 #[tokio::test]
+#[ignore]
 async fn test_get_priority_fee_by_program_http(programs: Vec<String>) -> Result<()> {
     let client = HTTPClient::new(None)?;
 

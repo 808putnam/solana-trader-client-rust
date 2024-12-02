@@ -263,4 +263,33 @@ impl GrpcClient {
 
         Ok(response.into_inner())
     }
+
+    pub async fn get_moon_shot_new_token_stream(
+        &mut self,
+    ) -> Result<Streaming<api::GetMoonshotNewTokenStreamResponse>> {
+        let request = Request::new(api::GetMoonshotNewTokenStreamRequest {});
+
+        let response = self
+            .client
+            .get_moonshot_new_tokens_stream(request)
+            .await
+            .map_err(|e| anyhow::anyhow!("GetMoonShotNewTokenStream error: {}", e))?;
+
+        Ok(response.into_inner())
+    }
+
+    pub async fn get_moon_shot_swaps_stream(
+        &mut self,
+        tokens: Vec<String>,
+    ) -> Result<Streaming<api::GetMoonshotSwapStreamResponse>> {
+        let request = Request::new(api::GetMoonshotSwapStreamRequest { tokens });
+
+        let response = self
+            .client
+            .get_moonshot_swap_stream(request)
+            .await
+            .map_err(|e| anyhow::anyhow!("GetMoonShotSwapsStream error: {}", e))?;
+
+        Ok(response.into_inner())
+    }
 }

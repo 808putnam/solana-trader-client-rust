@@ -489,3 +489,63 @@ async fn test_pump_fun_tokens_and_swaps_integration_grpc() -> Result<()> {
     println!("Swap received: {:#?}", swap);
     Ok(())
 }
+
+#[test_case(1 ; "single new token")]
+#[tokio::test]
+#[ignore]
+async fn test_moon_shot_tokens_stream_grpc(expected_responses: usize) -> Result<()> {
+    let mut client = GrpcClient::new(None).await?;
+    let mut stream = client.get_moon_shot_new_token_stream().await?;
+
+    println!("starting moon shot new tokens stream");
+
+    let mut last_mint = String::new();
+    for response_num in 1..=expected_responses {
+        let response = stream
+            .next()
+            .await
+            .ok_or_else(|| anyhow::anyhow!("Stream ended without data"))?
+            .map_err(|e| anyhow::anyhow!("Stream error: {}", e))?;
+
+        println!("New token {} received: {:#?}", response_num, response);
+
+        // Save the mint for potential use/verification
+        last_mint = response.mint.clone();
+
+        // Basic validation
+        assert!(
+            !response.mint.is_empty(),
+            "Mint address should not be empty"
+        );
+    }
+
+    println!("Last mint received: {}", last_mint);
+    Ok(())
+}
+
+#[tokio::test]
+#[ignore]
+async fn test_moon_shot_tokens_and_swaps_integration_grpc() -> Result<()> {
+    let mut client = GrpcClient::new(None).await?;
+
+    // let mut tokens_stream = client.get_moon_shot_new_token_stream().await?;
+    // let new_token = tokens_stream
+    //     .next()
+    //     .await
+    //     .ok_or_else(|| anyhow::anyhow!("Tokens stream ended without data"))?
+    //     .map_err(|e| anyhow::anyhow!("Tokens stream error: {}", e))?;
+
+    // println!("New token received: {}", new_token.mint);
+
+    let mut swaps_stream = client
+        .get_moon_shot_swaps_stream(vec!["HotbHvrpB7cNas1sZ62q7wxTByaQaXQsa3dCPjtP4hCh".to_string()])
+        .await?;
+    let swap = swaps_stream
+        .next()
+        .await
+        .ok_or_else(|| anyhow::anyhow!("Swaps stream ended without data"))?
+        .map_err(|e| anyhow::anyhow!("Swaps stream error: {}", e))?;
+
+    println!("Swap received: {:#?}", swap);
+    Ok(())
+}
